@@ -1,6 +1,5 @@
 import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/build/three.module.js';
 import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/controls/OrbitControls.js';
-import { GUI } from 'https://threejsfundamentals.org/3rdparty/dat.gui.module.js';
 
 
       let renderer,
@@ -16,10 +15,8 @@ import { GUI } from 'https://threejsfundamentals.org/3rdparty/dat.gui.module.js'
       render();
 
       function addShape() {
-        let geometry = new THREE.BoxGeometry(50, 50, 50),
-          material = new THREE.MeshNormalMaterial({
-            //color: 0x2299ff,
-          });
+        let geometry = new THREE.BoxGeometry(15, 15, 15),
+        material = new THREE.MeshNormalMaterial( {color: 0xc2ff14} );
         let mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
       }
@@ -55,7 +52,7 @@ import { GUI } from 'https://threejsfundamentals.org/3rdparty/dat.gui.module.js'
         scene.add(light1);
         scene.add(light2);
 
-
+        //adding shapes
         addShape();
 
         //window resize
@@ -64,10 +61,19 @@ import { GUI } from 'https://threejsfundamentals.org/3rdparty/dat.gui.module.js'
 
       function animate() {
         requestAnimationFrame(animate);
+        render();
         controls.update();
       }
 
       function render() {
+        // mesh.rotation.x += 0.01;
+        // mesh.rotation.y += 0.02;
+
+        camera.position.z -= 0.4;
+        if (camera.position.z < 18) {
+            camera.position.z = 100;
+        }
+    
         renderer.render(scene, camera);
       }
 
