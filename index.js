@@ -1,86 +1,100 @@
-import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/build/three.module.js';
-import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/controls/OrbitControls.js';
+import * as THREE from "https://threejsfundamentals.org/threejs/resources/threejs/r110/build/three.module.js";
+import { OrbitControls } from "https://threejsfundamentals.org/threejs/resources/threejs/r110/examples/jsm/controls/OrbitControls.js";
 
+let renderer,
+  camera,
+  canvas,
+  controls,
+  scene,
+  width = window.innerWidth,
+  height = window.innerHeight;
 
-      let renderer,
-        camera,
-        canvas,
-        controls,
-        scene,
-        width = window.innerWidth,
-        height = window.innerHeight;
+init();
+animate();
+render();
 
-      init();
-      animate();
-      render();
+function addShape() {
+  let geometry = new THREE.BoxGeometry(15, 15, 15),
+    material = new THREE.MeshNormalMaterial({ color: 0xc2ff14 });
+  let mesh = new THREE.Mesh(geometry, material);
+  mesh.position.z = -100;
+  scene.add(mesh);
 
-      function addShape() {
-        let geometry = new THREE.BoxGeometry(15, 15, 15),
-        material = new THREE.MeshNormalMaterial( {color: 0xc2ff14} );
-        let mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-      }
+  const geometry2 = new THREE.SphereGeometry(50, 16, 16);
+  const material2 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  const sphereMaterial = new THREE.MeshLambertMaterial(
+    {
+      color: 0xCC0000
+    });
+  const sphere = new THREE.Mesh(geometry2, sphereMaterial);
+  sphere.position.z = -100;
+  sphere.position.x = -100;
 
-      function init() {
-        //RENDERER
-        canvas = document.getElementById("canvas");
-        renderer = new THREE.WebGLRenderer({
-          canvas: canvas,
-          antialias: true,
-        });
-        renderer.setClearColor(0x111111);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(width, height);
+  scene.add(sphere);
+}
 
-        //CAMERA
-        camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
-        camera.position.z = 100;
+function init() {
+  //RENDERER
+  canvas = document.getElementById("canvas");
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+  });
+  renderer.setClearColor(0x111111);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(width, height);
 
-        //CONTROLS
-        controls = new OrbitControls(camera, canvas);
-        controls.addEventListener("change", render);
+  //CAMERA
+  camera = new THREE.PerspectiveCamera(70, width / height, 1, 1000);
+  camera.position.z = 100;
 
-        //SCENE
-        scene = new THREE.Scene();
+  //CONTROLS
+  controls = new OrbitControls(camera, canvas);
+  controls.addEventListener("change", render);
 
-        //LIGHTS
-        const light1 = new THREE.AmbientLight(0xffffff, 0.5),
-          light2 = new THREE.DirectionalLight(0xffffff);
+  //SCENE
+  scene = new THREE.Scene();
 
-        light2.position.set(1, 1, 1);
+  //LIGHTS
+  const light1 = new THREE.AmbientLight(0xffffff, 0.5),
+    light2 = new THREE.DirectionalLight(0xffffff);
 
-        scene.add(light1);
-        scene.add(light2);
+  light2.position.set(1, 1, 1);
 
-        //adding shapes
-        addShape();
+  scene.add(light1);
+  scene.add(light2);
 
-        //window resize
-        window.addEventListener("resize", onWindowResize, false);
-      }
+  //adding shapes
+  addShape();
 
-      function animate() {
-        requestAnimationFrame(animate);
-        //calling render again and again which will render on new position giving us animation
-        render();
+  //window resize
+  window.addEventListener("resize", onWindowResize, false);
+}
 
-        //controls updating in animation loop
-        controls.update();
-      }
+function animate() {
+  requestAnimationFrame(animate);
+  //calling render again and again which will render on new position giving us animation
+  // render();
 
-      function render() {
+  //controls updating in animation loop
+  controls.update();
+}
 
-        camera.position.z -= 0.4;
-        if (camera.position.z < 18) {
-            camera.position.z = 100;
-        }
-    
-        renderer.render(scene, camera);
-      }
+function render() {
+  //Moving camera on z-axis: Click oncontrols also making animation. since controls are updating
+  // camera.position.z -= 0.4;
+  // if (camera.position.z < 18) {
+  //     camera.position.z = 100;
+  // }
 
-      function onWindowResize() {
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width / height);
-        controls.handleResize();
-      }
+  console.log("scene =z ", scene.position.z);
+
+  renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width / height);
+  controls.handleResize();
+}
