@@ -61,13 +61,14 @@ import { OrbitControls } from 'https://threejsfundamentals.org/threejs/resources
 
       function animate() {
         requestAnimationFrame(animate);
+        //calling render again and again which will render on new position giving us animation
         render();
+
+        //controls updating in animation loop
         controls.update();
       }
 
       function render() {
-        // mesh.rotation.x += 0.01;
-        // mesh.rotation.y += 0.02;
 
         camera.position.z -= 0.4;
         if (camera.position.z < 18) {
